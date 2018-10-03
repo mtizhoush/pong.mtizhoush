@@ -2,7 +2,7 @@ import sys
 import pygame
 from time import sleep
 
-def check_events(stats, play_button, paddle_bottom, paddle_top, paddle_right):
+def check_events(ai_settings, stats, play_button, paddle_bottom, paddle_top, paddle_right, sb, sb2):
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -13,13 +13,24 @@ def check_events(stats, play_button, paddle_bottom, paddle_top, paddle_right):
             check_keyup_events(event, paddle_bottom, paddle_top, paddle_right)
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(stats, play_button, mouse_x, mouse_y)
+            check_play_button(ai_settings, sb, sb2, stats, play_button, mouse_x, mouse_y)
 
-def check_play_button(stats, play_button, mouse_x, mouse_y):
-    if play_button.rect.collidepoint(mouse_x, mouse_y):
+def check_play_button(ai_settings,sb, sb2, stats, play_button, mouse_x, mouse_y):
+
+    button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
+
+    if button_clicked and not stats.game_active:
+
+        ai_settings.initialize_dynamic_settings()
+        pygame.mouse.set_visible(False)
+
+        #reset game
         stats.reset_stats()
         stats.game_active = True
-        pygame.mouse.set_visible(False)
+
+        #reset score
+        sb.prep_score_ai()
+        sb2.prep_score_user()
 
 def update_screen(ai_settings, start_up, screen, stats, sb, sb2, paddle_bottom_ai, paddle_left_ai, paddle_top_ai, paddle_bottom, paddle_top, paddle_right, ball, play_button):
     screen.fill(ai_settings.bg_color)
@@ -110,7 +121,7 @@ def check_ball_hit_wall(ai_settings, stats, screen, ball):
     screen_rect = screen.get_rect()
     if ball.rect.bottom >= screen_rect.bottom:
         wall_hit(ai_settings, stats, screen, ball)
-            
+
 
 def wall_hit(ai_settings, stats, screen, ball):
     if stats.balls_left > 0:
@@ -121,3 +132,10 @@ def wall_hit(ai_settings, stats, screen, ball):
         sleep(0.5)
     else:
         stats.game_active = False
+
+def update_paddle_bottom_ai(paddle_bottom_ai, ball):
+
+    if paddle_bottom_ai.check_edge() and ball.x >= paddle_bottom_ai.x:
+        paddle_bottom_ai.update()
+    if paddle_bottom_ai.check_edge() and ball.x <= paddle_bottom_ai.x:
+        paddle_bottom_ai.update()

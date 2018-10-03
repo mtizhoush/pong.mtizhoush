@@ -12,22 +12,34 @@ class Paddle_Bottom_Ai(Sprite):
         self.screen_rect = screen.get_rect()
 
         #Start paddle at bottom center of screen
-        self.rect.centerx = self.screen_rect.centerx // 2
+        self.rect.x = self.screen_rect.centerx // 2
         self.rect.bottom = self.screen_rect.bottom
 
         #Store a decimal value for paddle_bottom center
-        self.center = float(self.rect.centerx)
+        self.x = float(self.rect.x)
 
         self.moving_right = False
         self.moving_left = False
 
+    def check_edge(self):
+        screen_rect = self.screen.get_rect()
+        if self.rect.right < screen_rect.right:
+            return True
+        if self.rect.left > (screen_rect.right // 2):
+            return True
+
     def update(self):
-        if self.moving_right and self.rect.right < self.screen_rect.right:
+        """if self.moving_right and self.rect.right < self.screen_rect.right:
             self.center += self.ai_settings.paddle_bottom_speed_factor
         if self.moving_left and self.rect.left > 0:
             self.center -= self.ai_settings.paddle_bottom_speed_factor
 
-        self.rect.centerx = self.center
+        self.rect.centerx = self.center"""
+        self.x += self.ai_settings.paddle_bottom_speed_factor
+        self.rect.x = self.x
+
+        self.x -= self.ai_settings.paddle_bottom_speed_factor
+        self.rect.x = self.x
 
     def blitme(self):
         self.screen.blit(self.image, self.rect)

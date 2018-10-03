@@ -9,6 +9,10 @@ class Settings():
         self.bg_color = (10, 150, 200)
         self.bg_start_color = (0, 0, 0)
 
+
+        self.initialize_dynamic_settings()
+
+    def initialize_dynamic_settings(self):
         #Paddle settings
         self.paddle_bottom_speed_factor = 2
         self.paddle_top_speed_factor = 2
@@ -20,6 +24,7 @@ class Settings():
         self.ballx_direction = 1
         self.bally_direction = 1
         self.ball_limit = 1
+
 
 class GameStats():
     """Track statistics for Alien Invasion"""

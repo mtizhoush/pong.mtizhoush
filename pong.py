@@ -43,7 +43,7 @@ def run_game():
     ball = Ball(ai_settings, screen)
 
     while True:
-        gf.check_events(stats, play_button, paddle_bottom, paddle_top, paddle_right)
+        gf.check_events(ai_settings,stats, play_button, paddle_bottom, paddle_top, paddle_right, sb, sb2)
 
         if stats.game_active:
             paddle_bottom.update()
