@@ -1,6 +1,5 @@
 import sys
 import pygame
-from ball import Ball
 from time import sleep
 
 def check_events(stats, play_button, paddle_bottom, paddle_top, paddle_right):
@@ -75,9 +74,43 @@ def check_keyup_events(event, paddle_bottom, paddle_top, paddle_right):
     elif event.key == pygame.K_DOWN:
         paddle_right.moving_down = False
 
+def change_ballx_direction(ai_settings):
+    ai_settings.ballx_direction *= -1
 
-def update_ball(ball):
+def change_bally_direction(ai_settings):
+    ai_settings.bally_direction *= -1
+
+def update_ball(ai_settings, stats, screen, ball, paddle_bottom, paddle_top, paddle_right, paddle_bottom_ai, paddle_top_ai, paddle_left_ai):
+
+    check_ball_hit_wall(ai_settings, stats, screen, ball)
+
     ball.update()
+
+    #Ball and Paddle collisions
+    if pygame.sprite.collide_rect(paddle_bottom, ball):
+        change_ballx_direction(ai_settings)
+
+    if pygame.sprite.collide_rect(paddle_top, ball):
+        change_ballx_direction(ai_settings)
+
+    if pygame.sprite.collide_rect(paddle_right, ball):
+        change_ballx_direction(ai_settings)
+
+    if pygame.sprite.collide_rect(paddle_bottom_ai, ball):
+        change_ballx_direction(ai_settings)
+
+    if pygame.sprite.collide_rect(paddle_top_ai, ball):
+        change_ballx_direction(ai_settings)
+
+    if pygame.sprite.collide_rect(paddle_left_ai, ball):
+        change_bally_direction(ai_settings)
+
+def check_ball_hit_wall(ai_settings, stats, screen, ball):
+
+    screen_rect = screen.get_rect()
+    if ball.rect.bottom >= screen_rect.bottom:
+        wall_hit(ai_settings, stats, screen, ball)
+            
 
 def wall_hit(ai_settings, stats, screen, ball):
     if stats.balls_left > 0:

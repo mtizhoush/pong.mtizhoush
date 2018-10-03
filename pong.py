@@ -52,7 +52,7 @@ def run_game():
             paddle_bottom_ai.update()
             paddle_top_ai.update()
             paddle_left_ai.update()
-            gf.update_ball(ball)
+            gf.update_ball(ai_settings, stats, screen, ball, paddle_bottom, paddle_top, paddle_right, paddle_bottom_ai, paddle_top_ai, paddle_left_ai)
 
         gf.update_screen(ai_settings, start_up, screen, stats, sb, sb2, paddle_bottom_ai, paddle_left_ai, paddle_top_ai, paddle_bottom, paddle_top, paddle_right, ball, play_button)
 
